@@ -433,20 +433,15 @@ async function guardar() {
   });
 
   try {
-    const resp = await fetch(SCRIPT_URL + "?" + params.toString(), { mode: "no-cors" });
-    const data = await resp.json();
-    if (data.ok) {
-      limpiarTimers();
-      document.getElementById("success-detail").innerHTML = `
-        <div class="success-detail-row"><span class="lbl">Operador</span><span class="val">${currentOperador}</span></div>
-        <div class="success-detail-row"><span class="lbl">Panel</span><span class="val">${currentPanel}</span></div>
-        <div class="success-detail-row"><span class="lbl">Mediciones</span><span class="val">${vals.length}</span></div>
-        <div class="success-detail-row"><span class="lbl">Promedio</span><span class="val">${avg} seg</span></div>
-        <div class="success-detail-row"><span class="lbl">Fecha</span><span class="val">${fecha}</span></div>`;
-      showScreen("screen-exito");
-      return;
-    }
-    throw new Error(data.error || "Error desconocido");
+    await fetch(SCRIPT_URL + "?" + params.toString(), { mode: "no-cors" });
+    limpiarTimers();
+    document.getElementById("success-detail").innerHTML = `
+      <div class="success-detail-row"><span class="lbl">Operador</span><span class="val">${currentOperador}</span></div>
+      <div class="success-detail-row"><span class="lbl">Panel</span><span class="val">${currentPanel}</span></div>
+      <div class="success-detail-row"><span class="lbl">Mediciones</span><span class="val">${vals.length}</span></div>
+      <div class="success-detail-row"><span class="lbl">Promedio</span><span class="val">${avg} seg</span></div>
+      <div class="success-detail-row"><span class="lbl">Fecha</span><span class="val">${fecha}</span></div>`;
+    showScreen("screen-exito");
   } catch(e) {
     sb.className = "status-bar error show";
     document.getElementById("status-text").textContent = "Error: " + e.message;
