@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>KP1 — Tiempos de Armado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1565C0;
+  --blue-light: #1976D2;
+  --blue-pale: #E3F2FD;
+  --blue-mid: #BBDEFB;
+  --green: #2E7D32;
+  --green-pale: #E8F5E9;
+  --green-mid: #A5D6A7;
+  --orange: #E65100;
+  --orange-pale: #FFF3E0;
+  --orange-mid: #FFCC80;
+  --red: #C62828;
+  --red-pale: #FFEBEE;
+  --gray-50: #FAFAFA;
+  --gray-100: #F5F5F5;
+  --gray-200: #EEEEEE;
+  --gray-300: #E0E0E0;
+  --gray-400: #BDBDBD;
+  --gray-500: #9E9E9E;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+  --surface: #FFFFFF;
+  --bg: #F5F7FA;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--gray-900);
+  min-height: 100vh;
+  font-size: 15px;
+}
+
+/* HEADER */
+.header {
+  background: var(--blue);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(21,101,192,0.3);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+.header-icon {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.header-icon svg { width: 18px; height: 18px; fill: white; }
+.header-title { color: white; font-size: 16px; font-weight: 600; letter-spacing: -0.2px; }
+.header-sub { color: rgba(255,255,255,0.7); font-size: 12px; margin-top: 1px; }
+.btn-back {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  margin-right: 4px;
+}
+.btn-back svg { width: 18px; height: 18px; fill: white; }
+
+/* SCREENS */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* FORM SCREEN */
+.form-body { padding: 16px; }
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.card-header {
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex; align-items: center; gap: 8px;
+}
+.card-header-icon {
+  width: 28px; height: 28px;
+  background: var(--blue-pale);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+}
+.card-header-icon svg { width: 15px; height: 15px; fill: var(--blue); }
+.card-header-title { font-size: 13px; font-weight: 600; color: var(--gray-700); text-transform: uppercase; letter-spacing: 0.4px; }
+
+.field-row {
+  padding: 0 16px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.field-row:last-child { border-bottom: none; }
+
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-top: 12px;
+  margin-bottom: 4px;
+}
+.field-label .required { color: var(--blue); margin-left: 2px; }
+
+select.field-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--gray-900);
+  padding: 6px 0 12px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23757575' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  cursor: pointer;
+  outline: none;
+}
+select.field-input:focus { color: var(--blue); }
+select.field-input option { color: var(--gray-900); }
+
+.btn-primary {
+  width: 100%;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 15px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  margin-top: 4px;
+  letter-spacing: 0.2px;
+}
+.btn-primary:hover { background: var(--blue-light); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; transform: none; }
+
+/* INFO BAR */
+.info-bar {
+  background: var(--blue);
+  padding: 10px 16px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.info-chip {
+  background: rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 5px 10px;
+  margin-right: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.info-chip-label { font-size: 10px; color: rgba(255,255,255,0.6); font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
+.info-chip-value { font-size: 12px; color: white; font-weight: 600; margin-top: 1px; }
+
+/* MEDICION CARDS */
+.medicion-list { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+.med-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 14px 14px 12px;
+  transition: box-shadow 0.2s;
+  border: 1.5px solid transparent;
+}
+.med-card.running { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(21,101,192,0.08); }
+.med-card.done { border-color: var(--green-mid); }
+
+.med-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.med-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.med-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: none;
+}
+.med-badge.show { display: inline-block; }
+.med-badge.running { background: var(--blue-pale); color: var(--blue); display: inline-block; }
+.med-badge.done { background: var(--green-pale); color: var(--green); }
+
+.med-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--gray-300);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 12px;
+  transition: color 0.2s;
+}
+.med-time.running { color: var(--blue); }
+.med-time.done { color: var(--green); }
+
+.med-btns { display: flex; gap: 8px; }
+
+.btn-iniciar {
+  flex: 1;
+  background: var(--blue-pale);
+  color: var(--blue);
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-iniciar:hover { background: var(--blue-mid); }
+.btn-iniciar:active { transform: scale(0.97); }
+.btn-iniciar:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-iniciar svg { width: 14px; height: 14px; fill: var(--blue); }
+
+.btn-detener {
+  flex: 1;
+  background: var(--orange-pale);
+  color: var(--orange);
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-detener:hover { background: var(--orange-mid); }
+.btn-detener:active { transform: scale(0.97); }
+.btn-detener:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-detener svg { width: 14px; height: 14px; fill: var(--orange); }
+
+.btn-reset {
+  width: 40px;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-reset:hover { background: var(--gray-200); }
+.btn-reset:active { transform: scale(0.95); }
+
+/* SUMMARY */
+.summary-section { padding: 0 16px 12px; }
+.summary-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.summary-header {
+  background: var(--blue-pale);
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  divide-x: 1px solid var(--gray-100);
+}
+.summary-stat {
+  padding: 12px 14px;
+  border-right: 1px solid var(--gray-100);
+  text-align: center;
+}
+.summary-stat:last-child { border-right: none; }
+.summary-stat-val { font-size: 22px; font-weight: 600; color: var(--gray-900); font-family: 'DM Mono', monospace; }
+.summary-stat-lbl { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+
+/* FOOTER ACTIONS */
+.footer-actions {
+  padding: 12px 16px 24px;
+  display: flex;
+  gap: 10px;
+}
+.btn-volver {
+  flex: 0 0 auto;
+  background: var(--surface);
+  color: var(--gray-700);
+  border: 1.5px solid var(--gray-300);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-volver:active { background: var(--gray-100); }
+
+.btn-guardar {
+  flex: 1;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-guardar:hover { background: var(--blue-light); }
+.btn-guardar:active { transform: scale(0.98); }
+.btn-guardar:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; transform: none; }
+.btn-guardar svg { width: 16px; height: 16px; fill: white; }
+
+/* STATUS */
+.status-bar {
+  margin: 0 16px 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.status-bar.show { display: flex; }
+.status-bar.saving { background: var(--blue-pale); color: var(--blue); }
+.status-bar.error { background: var(--red-pale); color: var(--red); }
+
+/* LOADING */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--gray-200);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 14px; color: var(--gray-500); }
+
+/* SUCCESS SCREEN */
+.success-body {
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.success-icon {
+  width: 72px; height: 72px;
+  background: var(--green-pale);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.success-icon svg { width: 36px; height: 36px; fill: var(--green); }
+.success-title { font-size: 20px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
+.success-sub { font-size: 14px; color: var(--gray-500); line-height: 1.5; margin-bottom: 8px; }
+.success-detail {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+.success-detail-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+.success-detail-row .lbl { color: var(--gray-500); }
+.success-detail-row .val { font-weight: 600; color: var(--gray-800); font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner" id="header-inner">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+    </div>
+    <div>
+      <div class="header-title">Tiempos Armado puertas</div>
+      <div class="header-sub">Sector KP1</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANTALLA 1: FORMULARIO -->
+<div id="screen-form" class="screen active">
+  <div id="loading-datos" class="loading-screen">
+    <div class="spinner"></div>
+    <div class="loading-text">Cargando operadores y puestos...</div>
+  </div>
+  <div id="form-content" style="display:none;">
+    <div class="form-body">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.05 15.96 0 13.36 0c-1.46 0-2.75.67-3.64 1.7L9 3 7.28 1.7C6.39.67 5.1 0 3.64 0 1.04 0 -1 2.05 -1 4.64c0 .48.11.92.18 1.36H-2v14h22V6zm-7.82-3.96C12.6 1.4 12.97 1 13.36 1 14.28 1 15 1.72 15 2.64 15 3.56 14.28 4.28 13.36 4.28 12.44 4.28 11.72 3.56 11.72 2.64c0-.28.06-.54.16-.78z"/></svg>
+          </div>
+          <div class="card-header-title">Datos del ciclo</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-label">Panel controlado <span class="required">*</span></div>
+          <select id="sel-panel" class="field-input" onchange="onPanelChange()">
+            <option value="">Seleccioná un panel</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field-label">Puesto o estación <span class="required">*</span></div>
+          <select id="sel-puesto" class="field-input" onchange="checkForm()">
+            <option value="">Seleccioná un puesto</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field-label">Operador <span class="required">*</span></div>
+          <select id="sel-operador" class="field-input" onchange="checkForm()">
+            <option value="">Seleccioná un operador</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btn-siguiente" onclick="irAMedicion()" disabled>
+        Iniciar medición →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PANTALLA 2: MEDICIONES -->
+<div id="screen-medicion" class="screen">
+  <div class="info-bar" id="info-bar"></div>
+
+  <div class="medicion-list" id="medicion-list"></div>
+
+  <div class="summary-section" id="summary-section" style="display:none;">
+    <div class="summary-card">
+      <div class="summary-header">Resumen del ciclo</div>
+      <div class="summary-grid">
+        <div class="summary-stat">
+          <div class="summary-stat-val" id="sum-count">0</div>
+          <div class="summary-stat-lbl">mediciones</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-stat-val" id="sum-total">0.0</div>
+          <div class="summary-stat-lbl">total seg</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-stat-val" id="sum-avg">0.0</div>
+          <div class="summary-stat-lbl">promedio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="status-bar" id="status-bar">
+    <div class="spinner" style="width:18px;height:18px;border-width:2px;flex-shrink:0;"></div>
+    <span id="status-text"></span>
+  </div>
+
+  <div class="footer-actions">
+    <button class="btn-volver" onclick="irAFormulario()">← Volver</button>
+    <button class="btn-guardar" id="btn-guardar" onclick="guardar()" disabled>
+      <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+      Guardar en Sheet
+    </button>
+  </div>
+</div>
+
+<!-- PANTALLA 3: ÉXITO -->
+<div id="screen-exito" class="screen">
+  <div class="success-body">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+    </div>
+    <div class="success-title">¡Medición guardada!</div>
+    <div class="success-sub">Los datos se enviaron correctamente al Google Sheet de KP1.</div>
+    <div class="success-detail" id="success-detail"></div>
+    <button class="btn-primary" onclick="nuevaMedicion()" style="width:100%;max-width:320px;">
+      Nueva medición
+    </button>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2a6FZR42vNRjOSfu2CcFOKnwJoGTujLFl9V5skLwQjHjnJIZO7-NaEJtGOgtEsINz9Q/exec";
+
+let sheetData = { paneles: [], puestos: {}, operadores: [] };
+let timers = new Array(10).fill(0);
+let intervalIds = new Array(10).fill(null);
+let medicionValues = new Array(10).fill(null);
+let currentPanel = "", currentPuesto = "", currentOperador = "";
+
+// ─── CARGA DE DATOS ───────────────────────────────────────
+async function cargarDatos() {
+  try {
+    const resp = await fetch(SCRIPT_URL);
+    if (!resp.ok) throw new Error();
+    sheetData = await resp.json();
+  } catch(e) {
+    sheetData = {
+      paneles: ["Panel delantero derecho","Panel delantero izquierdo","Panel trasero derecho","Panel trasero izquierdo"],
+      puestos: {
+        "Panel delantero derecho": ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado de espuma","Op 60 Pegado de insono","Op 70 Control final + embalaje"],
+        "Panel delantero izquierdo": ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado de espuma","Op 60 Pegado de insono","Op 70 Control final + embalaje"],
+        "Panel trasero derecho": ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado espuma","Op 60 - 70 Control , embalaje"],
+        "Panel trasero izquierdo": ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado espuma","Op 60 - 70 Control , embalaje"]
+      },
+      operadores: ["Fernandez Jorge","Centurion Maximiliano","Sotelo Julio","Gonzalez Claudio","Aldeco Fabian","Olmedo Hugo","Palacios David"]
+    };
+  }
+  poblarPaneles();
+  poblarOperadores();
+  document.getElementById("loading-datos").style.display = "none";
+  document.getElementById("form-content").style.display = "block";
+}
+
+function poblarPaneles() {
+  const sel = document.getElementById("sel-panel");
+  sel.innerHTML = '<option value="">Seleccioná un panel</option>';
+  (sheetData.paneles || []).forEach(p => {
+    const o = document.createElement("option");
+    o.value = o.textContent = p;
+    sel.appendChild(o);
+  });
+}
+
+function poblarOperadores() {
+  const sel = document.getElementById("sel-operador");
+  sel.innerHTML = '<option value="">Seleccioná un operador</option>';
+  (sheetData.operadores || []).forEach(op => {
+    const o = document.createElement("option");
+    o.value = o.textContent = op;
+    sel.appendChild(o);
+  });
+}
+
+function onPanelChange() {
+  const panel = document.getElementById("sel-panel").value;
+  const sel = document.getElementById("sel-puesto");
+  sel.innerHTML = '<option value="">Seleccioná un puesto</option>';
+  if (panel && sheetData.puestos && sheetData.puestos[panel]) {
+    sheetData.puestos[panel].forEach(p => {
+      const o = document.createElement("option");
+      o.value = o.textContent = p;
+      sel.appendChild(o);
+    });
+  }
+  checkForm();
+}
+
+function checkForm() {
+  const ok = document.getElementById("sel-panel").value &&
+             document.getElementById("sel-puesto").value &&
+             document.getElementById("sel-operador").value;
+  document.getElementById("btn-siguiente").disabled = !ok;
+}
+
+// ─── NAVEGACIÓN ───────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0, 0);
+}
+
+function irAFormulario() {
+  limpiarTimers();
+  showScreen("screen-form");
+}
+
+function irAMedicion() {
+  currentPanel = document.getElementById("sel-panel").value;
+  currentPuesto = document.getElementById("sel-puesto").value;
+  currentOperador = document.getElementById("sel-operador").value;
+
+  // Info bar
+  document.getElementById("info-bar").innerHTML = `
+    <div class="info-chip"><div class="info-chip-label">Panel</div><div class="info-chip-value">${currentPanel}</div></div>
+    <div class="info-chip"><div class="info-chip-label">Puesto</div><div class="info-chip-value">${currentPuesto}</div></div>
+    <div class="info-chip"><div class="info-chip-label">Operador</div><div class="info-chip-value">${currentOperador}</div></div>
+  `;
+
+  medicionValues = new Array(10).fill(null);
+  timers = new Array(10).fill(0);
+  intervalIds = new Array(10).fill(null);
+
+  const list = document.getElementById("medicion-list");
+  list.innerHTML = "";
+  for (let i = 0; i < 10; i++) list.appendChild(crearTarjeta(i));
+
+  document.getElementById("summary-section").style.display = "none";
+  document.getElementById("status-bar").className = "status-bar";
+  document.getElementById("btn-guardar").disabled = true;
+  showScreen("screen-medicion");
+}
+
+// ─── TARJETAS DE MEDICIÓN ─────────────────────────────────
+function crearTarjeta(i) {
+  const d = document.createElement("div");
+  d.className = "med-card";
+  d.id = `mc-${i}`;
+  d.innerHTML = `
+    <div class="med-top">
+      <span class="med-num">Medición ${i+1}</span>
+      <span class="med-badge" id="badge-${i}"></span>
+    </div>
+    <div class="med-time" id="time-${i}">00.0</div>
+    <div class="med-btns">
+      <button class="btn-iniciar" id="binit-${i}" onclick="iniciar(${i})">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Iniciar
+      </button>
+      <button class="btn-detener" id="bdet-${i}" onclick="detener(${i})" disabled>
+        <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> Detener
+      </button>
+      <button class="btn-reset" onclick="resetear(${i})" title="Reiniciar">↺</button>
+    </div>`;
+  return d;
+}
+
+function iniciar(i) {
+  if (intervalIds[i]) return;
+  const startTs = Date.now() - timers[i] * 1000;
+  intervalIds[i] = setInterval(() => {
+    timers[i] = (Date.now() - startTs) / 1000;
+    document.getElementById(`time-${i}`).textContent = timers[i].toFixed(1);
+  }, 100);
+  document.getElementById(`mc-${i}`).className = "med-card running";
+  document.getElementById(`time-${i}`).className = "med-time running";
+  const badge = document.getElementById(`badge-${i}`);
+  badge.className = "med-badge running show";
+  badge.textContent = "midiendo...";
+  document.getElementById(`binit-${i}`).disabled = true;
+  document.getElementById(`bdet-${i}`).disabled = false;
+}
+
+function detener(i) {
+  if (!intervalIds[i]) return;
+  clearInterval(intervalIds[i]);
+  intervalIds[i] = null;
+  medicionValues[i] = parseFloat(timers[i].toFixed(2));
+  document.getElementById(`mc-${i}`).className = "med-card done";
+  document.getElementById(`time-${i}`).className = "med-time done";
+  const badge = document.getElementById(`badge-${i}`);
+  badge.className = "med-badge done show";
+  badge.textContent = "✓ " + medicionValues[i].toFixed(1) + " seg";
+  document.getElementById(`binit-${i}`).disabled = false;
+  document.getElementById(`bdet-${i}`).disabled = true;
+  actualizarResumen();
+}
+
+function resetear(i) {
+  clearInterval(intervalIds[i]);
+  intervalIds[i] = null;
+  timers[i] = 0;
+  medicionValues[i] = null;
+  document.getElementById(`mc-${i}`).className = "med-card";
+  document.getElementById(`time-${i}`).className = "med-time";
+  document.getElementById(`time-${i}`).textContent = "00.0";
+  document.getElementById(`badge-${i}`).className = "med-badge";
+  document.getElementById(`binit-${i}`).disabled = false;
+  document.getElementById(`bdet-${i}`).disabled = true;
+  actualizarResumen();
+}
+
+function actualizarResumen() {
+  const vals = medicionValues.filter(v => v !== null);
+  if (!vals.length) {
+    document.getElementById("summary-section").style.display = "none";
+    document.getElementById("btn-guardar").disabled = true;
+    return;
+  }
+  document.getElementById("summary-section").style.display = "block";
+  const total = vals.reduce((a, b) => a + b, 0);
+  const avg = total / vals.length;
+  document.getElementById("sum-count").textContent = vals.length;
+  document.getElementById("sum-total").textContent = total.toFixed(1);
+  document.getElementById("sum-avg").textContent = avg.toFixed(1);
+  document.getElementById("btn-guardar").disabled = false;
+}
+
+// ─── GUARDAR ──────────────────────────────────────────────
+async function guardar() {
+  const btn = document.getElementById("btn-guardar");
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;border-top-color:white;"></div> Guardando...';
+
+  const sb = document.getElementById("status-bar");
+  sb.className = "status-bar saving show";
+  document.getElementById("status-text").textContent = "Enviando al Google Sheet...";
+
+  const vals = medicionValues.filter(v => v !== null);
+  const total = vals.reduce((a, b) => a + b, 0);
+  const avg = vals.length ? (total / vals.length).toFixed(2) : "";
+
+  const now = new Date();
+  const fecha = now.toLocaleDateString("es-AR") + " " + now.toLocaleTimeString("es-AR", {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+
+  const body = {
+    fecha, panel: currentPanel, puesto: currentPuesto, operador: currentOperador,
+    m1: medicionValues[0] ?? "", m2: medicionValues[1] ?? "", m3: medicionValues[2] ?? "",
+    m4: medicionValues[3] ?? "", m5: medicionValues[4] ?? "", m6: medicionValues[5] ?? "",
+    m7: medicionValues[6] ?? "", m8: medicionValues[7] ?? "", m9: medicionValues[8] ?? "",
+    m10: medicionValues[9] ?? "", promedio: avg
+  };
+
+  try {
+    const resp = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      limpiarTimers();
+      document.getElementById("success-detail").innerHTML = `
+        <div class="success-detail-row"><span class="lbl">Operador</span><span class="val">${currentOperador}</span></div>
+        <div class="success-detail-row"><span class="lbl">Panel</span><span class="val">${currentPanel}</span></div>
+        <div class="success-detail-row"><span class="lbl">Mediciones</span><span class="val">${vals.length}</span></div>
+        <div class="success-detail-row"><span class="lbl">Promedio</span><span class="val">${avg} seg</span></div>
+        <div class="success-detail-row"><span class="lbl">Fecha</span><span class="val">${fecha}</span></div>
+      `;
+      showScreen("screen-exito");
+      return;
+    }
+    throw new Error(data.error || "Error desconocido");
+  } catch(e) {
+    sb.className = "status-bar error show";
+    document.getElementById("status-text").textContent = "Error al guardar: " + e.message;
+    btn.disabled = false;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:white;"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg> Reintentar`;
+  }
+}
+
+function nuevaMedicion() {
+  showScreen("screen-form");
+}
+
+function limpiarTimers() {
+  intervalIds.forEach(id => { if (id) clearInterval(id); });
+  intervalIds = new Array(10).fill(null);
+  timers = new Array(10).fill(0);
+  medicionValues = new Array(10).fill(null);
+}
+
+cargarDatos();
+</script>
+</body>
+</html>
