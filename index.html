@@ -223,7 +223,7 @@ select.field-input:focus { color: var(--blue); }
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxq96pZqFJVVC2veaE5jluOsvzhUR93wPHmGQl5R95K1Fs1yDN8BuDrpBcvX0N99mR0WQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxe45pj0dwBy58kJTRZA5sFPYkdVzfCSuoZJLrEOI2tYLL0XkdY3P6vJgwVA99Pb0OeOQ/exec";
 
 let sheetData = { paneles: [], puestos: {}, operadores: [] };
 let timers = new Array(10).fill(0);
@@ -231,28 +231,34 @@ let intervalIds = new Array(10).fill(null);
 let medicionValues = new Array(10).fill(null);
 let currentPanel = "", currentPuesto = "", currentOperador = "";
 
-async function cargarDatos() {
-  try {
-    const resp = await fetch(SCRIPT_URL + "?action=datos");
-    const data = await resp.json();
-    if (data.paneles) sheetData = data;
-    else throw new Error();
-  } catch(e) {
-    sheetData = {
-      paneles: ["Panel delantero derecho","Panel delantero izquierdo","Panel trasero derecho","Panel trasero izquierdo"],
-      puestos: {
-        "Panel delantero derecho": ["Op 20","Op 30","Op 40","Op 50","Op 60","Op 70"],
-        "Panel delantero izquierdo": ["Op 20","Op 30","Op 40","Op 50","Op 60","Op 70"],
-        "Panel trasero derecho": ["Op 20","Op 30","Op 40","Op 50","Op 60"],
-        "Panel trasero izquierdo": ["Op 20","Op 30","Op 40","Op 50","Op 60"]
-      },
-      operadores: ["Operador 1","Operador 2","Operador 3"]
-    };
-  }
-  poblarPaneles();
-  poblarOperadores();
-  document.getElementById("loading-datos").style.display = "none";
-  document.getElementById("form-content").style.display = "block";
+function cargarDatos() {
+  // JSONP approach - works with Apps Script without CORS issues
+  window._sheetCallback = function(data) {
+    if (data && data.paneles) sheetData = data;
+    poblarPaneles();
+    poblarOperadores();
+    document.getElementById("loading-datos").style.display = "none";
+    document.getElementById("form-content").style.display = "block";
+  };
+  
+  // Timeout fallback
+  const timeout = setTimeout(() => {
+    poblarPaneles();
+    poblarOperadores();
+    document.getElementById("loading-datos").style.display = "none";
+    document.getElementById("form-content").style.display = "block";
+  }, 5000);
+
+  const script = document.createElement("script");
+  script.src = SCRIPT_URL + "?action=datos&callback=_sheetCallback";
+  script.onerror = () => {
+    clearTimeout(timeout);
+    poblarPaneles();
+    poblarOperadores();
+    document.getElementById("loading-datos").style.display = "none";
+    document.getElementById("form-content").style.display = "block";
+  };
+  document.head.appendChild(script);
 }
 
 function poblarPaneles() {
@@ -433,7 +439,13 @@ async function guardar() {
   });
 
   try {
-    await fetch(SCRIPT_URL + "?" + params.toString(), { mode: "no-cors" });
+    // Use Image beacon - bypasses CORS completely
+    await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = img.onerror = resolve; // both resolve - we don't need response
+      img.src = SCRIPT_URL + "?" + params.toString();
+      setTimeout(resolve, 8000); // fallback timeout
+    });
     limpiarTimers();
     document.getElementById("success-detail").innerHTML = `
       <div class="success-detail-row"><span class="lbl">Operador</span><span class="val">${currentOperador}</span></div>
