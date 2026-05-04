@@ -3,29 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>KP1 — Tiempos de Armado</title>
+<title>Tiempos de Armado — Ingema</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --blue: #1565C0; --blue-light: #1976D2; --blue-pale: #E3F2FD; --blue-mid: #BBDEFB;
   --green: #2E7D32; --green-pale: #E8F5E9; --green-mid: #A5D6A7;
-  --orange: #E65100; --orange-pale: #FFF3E0; --orange-mid: #FFCC80;
-  --red: #C62828; --red-pale: #FFEBEE;
+  --orange: #E65100; --orange-pale: #FFF3E0;
   --gray-100: #F5F5F5; --gray-200: #EEEEEE; --gray-300: #E0E0E0;
   --gray-500: #9E9E9E; --gray-600: #757575; --gray-700: #616161; --gray-900: #212121;
   --surface: #FFFFFF; --bg: #F5F7FA; --radius: 10px; --radius-lg: 14px;
   --shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--gray-900); min-height: 100vh; font-size: 15px; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--gray-900); min-height: 100vh; }
+
+/* HEADER */
 .header { background: var(--blue); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(21,101,192,0.3); }
 .header-inner { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
 .header-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
 .header-icon svg { width: 18px; height: 18px; fill: white; }
+.header-texts { flex: 1; }
 .header-title { color: white; font-size: 16px; font-weight: 600; }
 .header-sub { color: rgba(255,255,255,0.7); font-size: 12px; margin-top: 1px; }
+.btn-back { width: 32px; height: 32px; background: rgba(255,255,255,0.15); border: none; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.btn-back svg { width: 18px; height: 18px; fill: white; }
+
+/* SCREENS */
 .screen { display: none; }
 .screen.active { display: block; }
+
+/* SECTOR SELECTOR */
+.sector-body { padding: 20px 16px; }
+.sector-intro { font-size: 14px; color: var(--gray-600); margin-bottom: 16px; text-align: center; }
+.sector-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sector-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 20px 16px;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  text-align: center;
+}
+.sector-card:active { transform: scale(0.97); }
+.sector-card.available:hover { border-color: var(--blue-mid); box-shadow: 0 0 0 3px rgba(21,101,192,0.08); }
+.sector-card.coming-soon { opacity: 0.45; cursor: not-allowed; }
+.sector-icon { width: 48px; height: 48px; background: var(--blue-pale); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.sector-icon svg { width: 24px; height: 24px; fill: var(--blue); }
+.sector-card.coming-soon .sector-icon { background: var(--gray-100); }
+.sector-card.coming-soon .sector-icon svg { fill: var(--gray-400); }
+.sector-name { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.sector-card.coming-soon .sector-name { color: var(--gray-500); }
+.sector-badge { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+.badge-active { background: var(--green-pale); color: var(--green); }
+.badge-soon { background: var(--gray-100); color: var(--gray-500); }
+
+/* FORM */
 .form-body { padding: 16px; }
 .card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 12px; }
 .card-header { padding: 12px 16px 10px; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; gap: 8px; }
@@ -40,10 +76,14 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
 .btn-primary { width: 100%; background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 15px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 4px; }
 .btn-primary:active { opacity: 0.85; }
 .btn-primary:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; }
+
+/* INFO BAR */
 .info-bar { background: var(--blue); padding: 10px 16px; display: flex; overflow-x: auto; gap: 0; }
 .info-chip { background: rgba(255,255,255,0.12); border-radius: 6px; padding: 5px 10px; margin-right: 8px; white-space: nowrap; flex-shrink: 0; }
 .info-chip-label { font-size: 10px; color: rgba(255,255,255,0.6); font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
 .info-chip-value { font-size: 12px; color: white; font-weight: 600; margin-top: 1px; }
+
+/* MEDICION */
 .medicion-list { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
 .med-card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 14px 14px 12px; border: 1.5px solid transparent; }
 .med-card.running { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(21,101,192,0.08); }
@@ -65,6 +105,8 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
 .btn-detener:disabled { opacity: 0.4; cursor: not-allowed; }
 .btn-detener svg { width: 14px; height: 14px; fill: var(--orange); }
 .btn-reset { width: 40px; background: var(--gray-100); color: var(--gray-600); border: none; border-radius: var(--radius); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+/* SUMMARY */
 .summary-section { padding: 0 16px 12px; }
 .summary-card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; }
 .summary-header { background: var(--blue-pale); padding: 10px 14px; font-size: 12px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -73,6 +115,8 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
 .summary-stat:last-child { border-right: none; }
 .summary-stat-val { font-size: 22px; font-weight: 600; color: var(--gray-900); font-family: 'DM Mono', monospace; }
 .summary-stat-lbl { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+
+/* FOOTER */
 .footer-actions { padding: 12px 16px 24px; display: flex; gap: 10px; }
 .btn-volver { flex: 0 0 auto; background: var(--surface); color: var(--gray-700); border: 1.5px solid var(--gray-300); border-radius: var(--radius); padding: 14px 18px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }
 .btn-guardar { flex: 1; background: var(--blue); color: white; border: none; border-radius: var(--radius); padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -81,14 +125,16 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
 .status-bar { margin: 0 16px 12px; padding: 12px 14px; border-radius: var(--radius); font-size: 14px; font-weight: 500; display: none; align-items: center; gap: 8px; }
 .status-bar.show { display: flex; }
 .status-bar.saving { background: var(--blue-pale); color: var(--blue); }
-.status-bar.error { background: var(--red-pale); color: var(--red); }
-.spinner { width: 36px; height: 36px; border: 3px solid var(--gray-200); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
+.status-bar.error { background: #FFEBEE; color: var(--red, #C62828); }
+.spinner { border: 3px solid var(--gray-200); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* SUCCESS */
 .success-body { padding: 48px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; }
 .success-icon { width: 72px; height: 72px; background: var(--green-pale); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
 .success-icon svg { width: 36px; height: 36px; fill: var(--green); }
 .success-title { font-size: 20px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
-.success-sub { font-size: 14px; color: var(--gray-500); line-height: 1.5; margin-bottom: 16px; }
+.success-sub { font-size: 14px; color: var(--gray-500); margin-bottom: 16px; }
 .success-detail { background: var(--gray-100); border-radius: var(--radius); padding: 12px 16px; width: 100%; max-width: 320px; margin-bottom: 28px; text-align: left; }
 .success-detail-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
 .success-detail-row .lbl { color: var(--gray-500); }
@@ -102,15 +148,55 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
     <div class="header-icon">
       <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
     </div>
-    <div>
-      <div class="header-title">Tiempos Armado puertas</div>
-      <div class="header-sub">Sector KP1</div>
+    <div class="header-texts">
+      <div class="header-title" id="header-title">Toma de tiempos</div>
+      <div class="header-sub" id="header-sub">Seleccioná un sector</div>
+    </div>
+    <button class="btn-back" id="btn-back" onclick="volverASector()" style="display:none;">
+      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- PANTALLA 0: SELECTOR DE SECTOR -->
+<div id="screen-sector" class="screen active">
+  <div class="sector-body">
+    <div class="sector-intro">¿En qué sector vas a tomar tiempos?</div>
+    <div class="sector-grid">
+      <div class="sector-card available" onclick="seleccionarSector('KP1')">
+        <div class="sector-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </div>
+        <div class="sector-name">KP1</div>
+        <span class="sector-badge badge-active">Activo</span>
+      </div>
+      <div class="sector-card coming-soon">
+        <div class="sector-icon">
+          <svg viewBox="0 0 24 24"><path d="M19.3 16.9c.4-.8.7-1.7.7-2.9C20 10.6 17.4 8 14.1 8c-.2 0-.3 0-.5 0C13 5.1 10.3 3 7 3c-3.9 0-7 3.1-7 7 0 1.5.5 2.9 1.3 4C.5 14.7 0 15.8 0 17c0 2.2 1.8 4 4 4h14c1.9 0 3.5-1.4 3.5-3.2 0-.7-.2-1.4-.7-1.9zM8 14v3H6v-3H3.5L7 9.5 10.5 14H8zm6 1h-2.5l3.5-4.5 3.5 4.5H16v3h-2v-3z"/></svg>
+        </div>
+        <div class="sector-name">Costura</div>
+        <span class="sector-badge badge-soon">Próximamente</span>
+      </div>
+      <div class="sector-card coming-soon">
+        <div class="sector-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+        </div>
+        <div class="sector-name">Inyección</div>
+        <span class="sector-badge badge-soon">Próximamente</span>
+      </div>
+      <div class="sector-card coming-soon">
+        <div class="sector-icon">
+          <svg viewBox="0 0 24 24"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>
+        </div>
+        <div class="sector-name">Tapizado</div>
+        <span class="sector-badge badge-soon">Próximamente</span>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- PANTALLA 1: FORMULARIO -->
-<div id="screen-form" class="screen active">
+<div id="screen-form" class="screen">
   <div class="form-body">
     <div class="card">
       <div class="card-header">
@@ -123,10 +209,6 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
         <div class="field-label">Panel controlado <span class="req">*</span></div>
         <select id="sel-panel" class="field-input" onchange="onPanelChange()">
           <option value="">Seleccioná un panel</option>
-          <option>Panel delantero derecho</option>
-          <option>Panel delantero izquierdo</option>
-          <option>Panel trasero derecho</option>
-          <option>Panel trasero izquierdo</option>
         </select>
       </div>
       <div class="field-row">
@@ -139,13 +221,6 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
         <div class="field-label">Operador <span class="req">*</span></div>
         <select id="sel-operador" class="field-input" onchange="checkForm()">
           <option value="">Seleccioná un operador</option>
-          <option>Fernandez Jorge</option>
-          <option>Centurion Maximiliano</option>
-          <option>Sotelo Julio</option>
-          <option>Gonzalez Claudio</option>
-          <option>Aldeco Fabian</option>
-          <option>Olmedo Hugo</option>
-          <option>Palacios David</option>
         </select>
       </div>
     </div>
@@ -160,10 +235,9 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
   <div class="summary-section" id="summary-section" style="display:none;">
     <div class="summary-card">
       <div class="summary-header">Resumen del ciclo</div>
-      <div class="summary-grid">
+      <div class="summary-grid" style="grid-template-columns:1fr 1fr;">
         <div class="summary-stat"><div class="summary-stat-val" id="sum-count">0</div><div class="summary-stat-lbl">mediciones</div></div>
-        <div class="summary-stat"><div class="summary-stat-val" id="sum-total">0.0</div><div class="summary-stat-lbl">total seg</div></div>
-        <div class="summary-stat"><div class="summary-stat-val" id="sum-avg">0.0</div><div class="summary-stat-lbl">promedio</div></div>
+        <div class="summary-stat"><div class="summary-stat-val" id="sum-avg">0.0</div><div class="summary-stat-lbl">promedio seg</div></div>
       </div>
     </div>
   </div>
@@ -185,36 +259,83 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
   <div class="success-body">
     <div class="success-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
     <div class="success-title">¡Medición guardada!</div>
-    <div class="success-sub">Los datos se enviaron correctamente al Google Sheet de KP1.</div>
+    <div class="success-sub">Los datos se enviaron correctamente al Sheet.</div>
     <div class="success-detail" id="success-detail"></div>
-    <button class="btn-primary" onclick="nuevaMedicion()" style="width:100%;max-width:320px;">Nueva medición</button>
+    <div style="display:flex;gap:10px;width:100%;max-width:320px;">
+      <button class="btn-volver" onclick="volverASector()" style="flex:0 0 auto;">Sectores</button>
+      <button class="btn-primary" onclick="irAFormulario()" style="flex:1;margin:0;">Nueva medición</button>
+    </div>
   </div>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxe45pj0dwBy58kJTRZA5sFPYkdVzfCSuoZJLrEOI2tYLL0XkdY3P6vJgwVA99Pb0OeOQ/exec";
-
-const PUESTOS = {
-  "Panel delantero derecho":  ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado de espuma","Op 60 Pegado de insono","Op 70 Control final + embalaje"],
-  "Panel delantero izquierdo":["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado de espuma","Op 60 Pegado de insono","Op 70 Control final + embalaje"],
-  "Panel trasero derecho":    ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado espuma","Op 60 - 70 Control , embalaje"],
-  "Panel trasero izquierdo":  ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado espuma","Op 60 - 70 Control , embalaje"]
+// ─── CONFIGURACIÓN DE SECTORES ────────────────────────────
+// Para agregar un sector nuevo: agregá una entrada acá con su script URL y datos
+const SECTORES = {
+  KP1: {
+    scriptUrl: "https://script.google.com/macros/s/AKfycbxe45pj0dwBy58kJTRZA5sFPYkdVzfCSuoZJLrEOI2tYLL0XkdY3P6vJgwVA99Pb0OeOQ/exec",
+    paneles: ["Panel delantero derecho","Panel delantero izquierdo","Panel trasero derecho","Panel trasero izquierdo"],
+    puestos: {
+      "Panel delantero derecho":  ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado de espuma","Op 60 Pegado de insono","Op 70 Control final + embalaje"],
+      "Panel delantero izquierdo":["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado de espuma","Op 60 Pegado de insono","Op 70 Control final + embalaje"],
+      "Panel trasero derecho":    ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado espuma","Op 60 - 70 Control , embalaje"],
+      "Panel trasero izquierdo":  ["Op 20 Estacion 1 calesin","Op 30 Estacion 2 calesin","Op 40 Soldadura Ultrasonido","Op 50 Pegado espuma","Op 60 - 70 Control , embalaje"]
+    },
+    operadores: ["Fernandez Jorge","Centurion Maximiliano","Sotelo Julio","Gonzalez Claudio","Aldeco Fabian","Olmedo Hugo","Palacios David"]
+  }
+  // KP2: { scriptUrl: "...", paneles: [...], puestos: {...}, operadores: [...] },
+  // KP3: { ... }
 };
 
+let currentSector = null;
 let timers = new Array(10).fill(0);
 let intervalIds = new Array(10).fill(null);
 let medicionValues = new Array(10).fill(null);
 let currentPanel = "", currentPuesto = "", currentOperador = "";
 
+// ─── SECTOR ───────────────────────────────────────────────
+function seleccionarSector(nombre) {
+  currentSector = SECTORES[nombre];
+  if (!currentSector) return;
+  document.getElementById("header-title").textContent = "Tiempos de Armado";
+  document.getElementById("header-sub").textContent = "Sector " + nombre;
+  document.getElementById("btn-back").style.display = "flex";
+  poblarFormulario();
+  showScreen("screen-form");
+}
+
+function volverASector() {
+  limpiarTimers();
+  currentSector = null;
+  document.getElementById("header-title").textContent = "Toma de tiempos";
+  document.getElementById("header-sub").textContent = "Seleccioná un sector";
+  document.getElementById("btn-back").style.display = "none";
+  showScreen("screen-sector");
+}
+
+// ─── FORMULARIO ───────────────────────────────────────────
+function poblarFormulario() {
+  const selPanel = document.getElementById("sel-panel");
+  selPanel.innerHTML = '<option value="">Seleccioná un panel</option>';
+  currentSector.paneles.forEach(p => {
+    const o = document.createElement("option"); o.value = o.textContent = p; selPanel.appendChild(o);
+  });
+  document.getElementById("sel-puesto").innerHTML = '<option value="">Seleccioná un puesto</option>';
+  const selOp = document.getElementById("sel-operador");
+  selOp.innerHTML = '<option value="">Seleccioná un operador</option>';
+  currentSector.operadores.forEach(op => {
+    const o = document.createElement("option"); o.value = o.textContent = op; selOp.appendChild(o);
+  });
+  document.getElementById("btn-siguiente").disabled = true;
+}
+
 function onPanelChange() {
   const panel = document.getElementById("sel-panel").value;
   const sel = document.getElementById("sel-puesto");
   sel.innerHTML = '<option value="">Seleccioná un puesto</option>';
-  if (panel && PUESTOS[panel]) {
-    PUESTOS[panel].forEach(p => {
-      const o = document.createElement("option");
-      o.value = o.textContent = p;
-      sel.appendChild(o);
+  if (panel && currentSector.puestos[panel]) {
+    currentSector.puestos[panel].forEach(p => {
+      const o = document.createElement("option"); o.value = o.textContent = p; sel.appendChild(o);
     });
   }
   checkForm();
@@ -227,14 +348,7 @@ function checkForm() {
   document.getElementById("btn-siguiente").disabled = !ok;
 }
 
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  window.scrollTo(0, 0);
-}
-
-function irAFormulario() { limpiarTimers(); showScreen("screen-form"); }
-
+// ─── MEDICIÓN ─────────────────────────────────────────────
 function irAMedicion() {
   currentPanel = document.getElementById("sel-panel").value;
   currentPuesto = document.getElementById("sel-puesto").value;
@@ -254,6 +368,8 @@ function irAMedicion() {
   document.getElementById("btn-guardar").disabled = true;
   showScreen("screen-medicion");
 }
+
+function irAFormulario() { limpiarTimers(); showScreen("screen-form"); }
 
 function crearTarjeta(i) {
   const d = document.createElement("div");
@@ -309,15 +425,28 @@ function resetear(i) {
 
 function actualizarResumen() {
   const vals = medicionValues.filter(v => v !== null);
-  if (!vals.length) { document.getElementById("summary-section").style.display = "none"; document.getElementById("btn-guardar").disabled = true; return; }
+  if (!vals.length) {
+    document.getElementById("summary-section").style.display = "none";
+    document.getElementById("btn-guardar").disabled = true;
+    return;
+  }
   document.getElementById("summary-section").style.display = "block";
   const total = vals.reduce((a,b) => a+b, 0);
-  document.getElementById("sum-count").textContent = vals.length;
-  document.getElementById("sum-total").textContent = total.toFixed(1);
-  document.getElementById("sum-avg").textContent = (total/vals.length).toFixed(1);
-  document.getElementById("btn-guardar").disabled = false;
+  const avg = total / vals.length;
+  document.getElementById("sum-count").textContent = vals.length + "/10";
+  document.getElementById("sum-avg").textContent = avg.toFixed(1);
+  // Mínimo 5 mediciones para poder guardar
+  document.getElementById("btn-guardar").disabled = vals.length < 5;
+  // Indicador visual en el botón
+  const btn = document.getElementById("btn-guardar");
+  if (vals.length < 5) {
+    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> Mínimo 5 mediciones (${vals.length}/5)`;
+  } else {
+    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:white;"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg> Guardar en Sheet`;
+  }
 }
 
+// ─── GUARDAR ──────────────────────────────────────────────
 function guardar() {
   const btn = document.getElementById("btn-guardar");
   btn.disabled = true;
@@ -340,17 +469,15 @@ function guardar() {
     m10:medicionValues[9]??"", promedio:avg
   });
 
-  // Usar iframe oculto — evita CORS completamente
   const iframe = document.createElement("iframe");
   iframe.style.display = "none";
-  iframe.name = "hidden_frame_" + Date.now();
+  iframe.name = "hf_" + Date.now();
   document.body.appendChild(iframe);
 
   const form = document.createElement("form");
   form.method = "GET";
-  form.action = SCRIPT_URL;
+  form.action = currentSector.scriptUrl;
   form.target = iframe.name;
-
   for (const [key, val] of params.entries()) {
     const input = document.createElement("input");
     input.type = "hidden"; input.name = key; input.value = val;
@@ -361,19 +488,23 @@ function guardar() {
   iframe.onload = () => {
     limpiarTimers();
     document.getElementById("success-detail").innerHTML =
-      `<div class="success-detail-row"><span class="lbl">Operador</span><span class="val">${currentOperador}</span></div>
+      `<div class="success-detail-row"><span class="lbl">Sector</span><span class="val">${document.getElementById("header-sub").textContent}</span></div>
+       <div class="success-detail-row"><span class="lbl">Operador</span><span class="val">${currentOperador}</span></div>
        <div class="success-detail-row"><span class="lbl">Panel</span><span class="val">${currentPanel}</span></div>
        <div class="success-detail-row"><span class="lbl">Mediciones</span><span class="val">${vals.length}</span></div>
        <div class="success-detail-row"><span class="lbl">Promedio</span><span class="val">${avg} seg</span></div>
        <div class="success-detail-row"><span class="lbl">Fecha</span><span class="val">${fecha}</span></div>`;
     showScreen("screen-exito");
-    setTimeout(() => { document.body.removeChild(iframe); document.body.removeChild(form); }, 5000);
+    setTimeout(() => { try { document.body.removeChild(iframe); document.body.removeChild(form); } catch(e){} }, 5000);
   };
-
   form.submit();
 }
 
-function nuevaMedicion() { showScreen("screen-form"); }
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0, 0);
+}
 
 function limpiarTimers() {
   intervalIds.forEach(id => { if (id) clearInterval(id); });
