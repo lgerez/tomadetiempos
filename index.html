@@ -562,7 +562,7 @@ function guardar() {
     document.getElementById("success-detail").innerHTML =
       `<div class="success-detail-row"><span class="lbl">Sector</span><span class="val">${document.getElementById("header-sub").textContent}</span></div>
        <div class="success-detail-row"><span class="lbl">Operador</span><span class="val">${currentOperador}</span></div>
-       <div class="success-detail-row"><span class="lbl">Panel</span><span class="val">${currentPanel}</span></div>
+       <div class="success-detail-row"><span class="lbl">${currentSector.labelPanel || "Panel"}</span><span class="val">${currentPanel}</span></div>
        <div class="success-detail-row"><span class="lbl">Mediciones</span><span class="val">${vals.length}</span></div>
        <div class="success-detail-row"><span class="lbl">Promedio</span><span class="val">${avg} seg</span></div>
        <div class="success-detail-row"><span class="lbl">Fecha</span><span class="val">${fecha}</span></div>`;
