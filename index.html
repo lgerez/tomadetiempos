@@ -541,23 +541,12 @@ function guardar() {
     m10:medicionValues[9]??"", promedio:avg
   });
 
-  const iframe = document.createElement("iframe");
-  iframe.style.display = "none";
-  iframe.name = "hf_" + Date.now();
-  document.body.appendChild(iframe);
+  // fetch no-cors + timeout — funciona en todos los navegadores incluyendo Chrome mobile
+  fetch(currentSector.scriptUrl + "?" + params.toString(), { mode: "no-cors" })
+    .catch(() => {}); // ignoramos error de CORS, el dato igual llega
 
-  const form = document.createElement("form");
-  form.method = "GET";
-  form.action = currentSector.scriptUrl;
-  form.target = iframe.name;
-  for (const [key, val] of params.entries()) {
-    const input = document.createElement("input");
-    input.type = "hidden"; input.name = key; input.value = val;
-    form.appendChild(input);
-  }
-  document.body.appendChild(form);
-
-  iframe.onload = () => {
+  // Mostramos éxito después de 2.5 seg (tiempo suficiente para que el script reciba)
+  setTimeout(() => {
     limpiarTimers();
     document.getElementById("success-detail").innerHTML =
       `<div class="success-detail-row"><span class="lbl">Sector</span><span class="val">${document.getElementById("header-sub").textContent}</span></div>
@@ -567,9 +556,7 @@ function guardar() {
        <div class="success-detail-row"><span class="lbl">Promedio</span><span class="val">${avg} seg</span></div>
        <div class="success-detail-row"><span class="lbl">Fecha</span><span class="val">${fecha}</span></div>`;
     showScreen("screen-exito");
-    setTimeout(() => { try { document.body.removeChild(iframe); document.body.removeChild(form); } catch(e){} }, 5000);
-  };
-  form.submit();
+  }, 2500);
 }
 
 function showScreen(id) {
