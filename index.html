@@ -184,12 +184,12 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
         <div class="sector-name">Inyección</div>
         <span class="sector-badge badge-soon">Próximamente</span>
       </div>
-      <div class="sector-card coming-soon">
+      <div class="sector-card available" onclick="seleccionarSector('Tapizado')">
         <div class="sector-icon">
           <svg viewBox="0 0 24 24"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>
         </div>
         <div class="sector-name">Tapizado</div>
-        <span class="sector-badge badge-soon">Próximamente</span>
+        <span class="sector-badge badge-active">Activo</span>
       </div>
     </div>
   </div>
@@ -351,8 +351,37 @@ const SECTORES = {
       "Carrillo Sara","Molina Marisol","Sosa Gonzalo"
     ]
   }
-  // Inyeccion: { scriptUrl: "...", paneles: [...], puestos: {...}, operadores: [...] },
-  // Tapizado: { ... }
+,
+  Tapizado: {
+    labelPanel: "Proceso controlado",
+    placeholderPanel: "Seleccioná un proceso",
+    scriptUrl: "https://script.google.com/macros/s/AKfycbylsOMdoiIouqMjgPZrCUpI4e6N28n6ijVOETto7l1TUJcoFLrODE97oO1MsP2Vrd0/exec",
+    paneles: [
+      "Proceso de tapizado Garnish 55011 - KK230"
+    ],
+    puestos: {
+      "Proceso de tapizado Garnish 55011 - KK230": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 a - Tapizado y cortes",
+        "80 b - Cortes y doblado",
+        "80 c - Cortes , terminaciones",
+        "90 - Montaje de componentes",
+        "100 - Control sistema de visión",
+        "110 - Trazabilidad"
+      ]
+    },
+    operadores: [
+      "Soria Patricia","Ruella Natalia","Fernandez Miriam","Gonzalez Cristian",
+      "Gonzalez Sergio","Noceda Eduardo","Garcia Jose","Praceres Matias","Palacios David"
+    ]
+  }
+  // Inyeccion: { scriptUrl: "...", paneles: [...], puestos: {...}, operadores: [...] }
 };
 
 let currentSector = null;
