@@ -184,11 +184,18 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
         <div class="sector-name">Inyección</div>
         <span class="sector-badge badge-soon">Próximamente</span>
       </div>
-      <div class="sector-card available" onclick="seleccionarSector('Tapizado')">
+      <div class="sector-card available" onclick="seleccionarSector('TapizadoH1312')">
         <div class="sector-icon">
           <svg viewBox="0 0 24 24"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>
         </div>
-        <div class="sector-name">Tapizado</div>
+        <div class="sector-name">Tapizado H1312</div>
+        <span class="sector-badge badge-active">Activo</span>
+      </div>
+      <div class="sector-card available" onclick="seleccionarSector('TapizadoToyota')">
+        <div class="sector-icon">
+          <svg viewBox="0 0 24 24"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>
+        </div>
+        <div class="sector-name">Tapizado Toyota</div>
         <span class="sector-badge badge-active">Activo</span>
       </div>
     </div>
@@ -352,7 +359,7 @@ const SECTORES = {
     ]
   }
 ,
-  Tapizado: {
+  TapizadoToyota: {
     labelPanel: "Pieza controlada",
     placeholderPanel: "Seleccioná una pieza",
     scriptUrl: "https://script.google.com/macros/s/AKfycbylsOMdoiIouqMjgPZrCUpI4e6N28n6ijVOETto7l1TUJcoFLrODE97oO1MsP2Vrd0/exec",
@@ -400,10 +407,205 @@ const SECTORES = {
     operadores: [
       "Soria Patricia","Ruella Natalia","Fernandez Miriam","Gonzalez Cristian",
       "Gonzalez Sergio","Noceda Eduardo","Garcia Jose","Praceres Matias","Palacios David",
-      "Pirelli Juan","Camacho Rolando","Plorutti Martin","Gomez Daniel","Candia Jesica","Barrios Martin"
+      "Zanlongo Valeria","Colque Gaston","Pirelli Juan","Camacho Rolando",
+      "Plorutti Martin","Gomez Daniel","Candia Jesica","Barrios Martin"
     ]
   }
   // Inyeccion: { scriptUrl: "...", paneles: [...], puestos: {...}, operadores: [...] }
+
+  ,
+  TapizadoH1312: {
+    labelPanel: "Pieza controlada",
+    placeholderPanel: "Seleccioná una pieza",
+    scriptUrl: "https://script.google.com/macros/s/AKfycbz9xp3-FA3mSgmu6nfJKSWUQtAAsrTU0Mkv7VAyOAP_2VxwFL-51RmV1DMLnVHurqc/exec",
+    paneles: [
+      "40-12500  Apoyabrazos Tapizado DD (E2-E3)",
+      "40-12501  Apoyabrazos Tapizado DI (E2-E3)",
+      "40-12506  Apoyabrazos Tapizado TD (E2-E3)",
+      "40-12507  Apoyabrazos Tapizado TI (E2-E3)",
+      "40-12502  Medallón Tapizado DD (E2)",
+      "40-12503  Medallón Tapizado DI (E2)",
+      "40-12508  Medallón Tapizado TD (E2)",
+      "40-12509  Medallón Tapizado TI (E2)",
+      "40-12504  Medallón Tapizado DD (E3)",
+      "40-12505  Medallón Tapizado DI (E3)",
+      "40-12510  Medallón Tapizado TD (E3)",
+      "40-12511  Medallón Tapizado TI (E3)"
+    ],
+    puestos: {
+      "40-12500  Apoyabrazos Tapizado DD (E2-E3)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12501  Apoyabrazos Tapizado DI (E2-E3)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12506  Apoyabrazos Tapizado TD (E2-E3)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12507  Apoyabrazos Tapizado TI (E2-E3)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12502  Medallón Tapizado DD (E2)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12503  Medallón Tapizado DI (E2)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12508  Medallón Tapizado TD (E2)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12509  Medallón Tapizado TI (E2)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12504  Medallón Tapizado DD (E3)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12505  Medallón Tapizado DI (E3)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12510  Medallón Tapizado TD (E3)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ],
+      "40-12511  Medallón Tapizado TI (E3)": [
+        "10 - Lavado con alcohol",
+        "20 - Horneado",
+        "30 - Aplicacion de primer",
+        "40 - Horneado",
+        "50 - Aplicacion adhesivo en plastico",
+        "60 - Aplicacion adhesivo en vinilo",
+        "70 - Horneado",
+        "80 - Tapizado",
+        "100 - Trazabilidad",
+        "110 - Curado frío",
+        "120 - Control final",
+        "130 - Embalaje"
+      ]
+    },
+    operadores: [
+      "Soria Patricia","Ruella Natalia","Fernandez Miriam","Gonzalez Cristian","Gonzalez Sergio","Noceda Eduardo","Garcia Jose","Praceres Matias","Palacios David","Zanlongo Valeria","Colque Gaston","Pirelli Juan","Camacho Rolando","Plorutti Martin","Gomez Daniel","Candia Jesica","Barrios Martin"
+    ]
+  }
 };
 
 let currentSector = null;
