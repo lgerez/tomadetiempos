@@ -184,6 +184,27 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
         <div class="sector-name">Inyección</div>
         <span class="sector-badge badge-soon">Próximamente</span>
       </div>
+      <div class="sector-card available" onclick="seleccionarSector('PunterasMBA')">
+        <div class="sector-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14z"/></svg>
+        </div>
+        <div class="sector-name">Punteras MBA</div>
+        <span class="sector-badge badge-active">Activo</span>
+      </div>
+      <div class="sector-card available" onclick="seleccionarSector('MontantBaie')">
+        <div class="sector-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+        </div>
+        <div class="sector-name">Montant Baie</div>
+        <span class="sector-badge badge-active">Activo</span>
+      </div>
+      <div class="sector-card available" onclick="seleccionarSector('SalidaEmergencia')">
+        <div class="sector-icon">
+          <svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.72L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95zM11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05z"/></svg>
+        </div>
+        <div class="sector-name">Salida Emergencia</div>
+        <span class="sector-badge badge-active">Activo</span>
+      </div>
       <div class="sector-card available" onclick="seleccionarSector('TapizadoH1312')">
         <div class="sector-icon">
           <svg viewBox="0 0 24 24"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>
@@ -605,6 +626,49 @@ const SECTORES = {
     operadores: [
       "Soria Patricia","Ruella Natalia","Fernandez Miriam","Gonzalez Cristian","Gonzalez Sergio","Noceda Eduardo","Garcia Jose","Praceres Matias","Palacios David","Zanlongo Valeria","Colque Gaston","Pirelli Juan","Camacho Rolando","Plorutti Martin","Gomez Daniel","Candia Jesica","Barrios Martin"
     ]
+  }
+  ,
+  PunterasMBA: {
+    labelPanel: "Pieza controlada",
+    placeholderPanel: "Seleccioná una pieza",
+    scriptUrl: "https://script.google.com/a/macros/f2jtechplast.com/s/AKfycbx-csZAfRT9mXDWjR0tnGwjFRXVme6fxYiEaO3aBE_tKaT4V5jIKi_N2i4A7LETbvog/exec",
+    paneles: ["Armado y soldado punteras MBA"],
+    puestos: {
+      "Armado y soldado punteras MBA": [
+        "Armado",
+        "Soldadura US",
+        "Montaje sensor, trazabilidad y embalaje"
+      ]
+    },
+    operadores: ["Sotelo Julio"]
+  }
+  ,
+  MontantBaie: {
+    labelPanel: "Pieza controlada",
+    placeholderPanel: "Seleccioná una pieza",
+    scriptUrl: "https://script.google.com/a/macros/f2jtechplast.com/s/AKfycbylsl-wAQxO5H9nFWhAdlCa3NBRunz5IW33d9KRT3VDEF66yNIXW9e-Jx6jgInCwHDsTw/exec",
+    paneles: ["Armado montant baie P21"],
+    puestos: {
+      "Armado montant baie P21": [
+        "Montaje componentes",
+        "Soldadura US , control y trazabilidad.",
+        "Embalaje"
+      ]
+    },
+    operadores: ["Sotelo Julio"]
+  }
+  ,
+  SalidaEmergencia: {
+    labelPanel: "Pieza controlada",
+    placeholderPanel: "Seleccioná una pieza",
+    scriptUrl: "https://script.google.com/macros/s/AKfycbwPDSMz4csdeDiHlCXXXdycZQ8DblYgXMsxyUlXGR-uZ94XK0-vQyfmWV5F3TzwAceZRA/exec",
+    paneles: ["Montaje insonorizantes MBA"],
+    puestos: {
+      "Montaje insonorizantes MBA": [
+        "10 - Montaje de espumas"
+      ]
+    },
+    operadores: ["Acosta Celestino", "Centurion Maximiliano"]
   }
 };
 
