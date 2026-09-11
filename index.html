@@ -105,6 +105,19 @@ select.field-input { width: 100%; border: none; background: transparent; font-fa
 .btn-detener:disabled { opacity: 0.4; cursor: not-allowed; }
 .btn-detener svg { width: 14px; height: 14px; fill: var(--orange); }
 .btn-reset { width: 40px; background: var(--gray-100); color: var(--gray-600); border: none; border-radius: var(--radius); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btn-burbuja {
+  width: 36px; height: 36px;
+  background: var(--gray-100);
+  border: none; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: background 0.15s;
+}
+.btn-burbuja svg { width: 18px; height: 18px; fill: var(--gray-500); }
+.btn-burbuja.activo { background: var(--blue-pale); }
+.btn-burbuja.activo svg { fill: var(--blue); }
+.comentario-input { width: 100%; border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 8px 10px; font-family: "DM Sans", sans-serif; font-size: 14px; color: var(--gray-900); outline: none; background: var(--gray-50); }
+.comentario-input:focus { border-color: var(--blue); background: white; }
 
 /* SUMMARY */
 .summary-section { padding: 0 16px 12px; }
@@ -676,6 +689,7 @@ let currentSector = null;
 let timers = new Array(10).fill(0);
 let intervalIds = new Array(10).fill(null);
 let medicionValues = new Array(10).fill(null);
+let comentarios = new Array(10).fill("");
 let currentPanel = "", currentPuesto = "", currentOperador = "";
 
 // ─── SECTOR ───────────────────────────────────────────────
@@ -747,6 +761,7 @@ function irAMedicion() {
      <div class="info-chip"><div class="info-chip-label">Puesto</div><div class="info-chip-value">${currentPuesto}</div></div>
      <div class="info-chip"><div class="info-chip-label">Operador</div><div class="info-chip-value">${currentOperador}</div></div>`;
   medicionValues = new Array(10).fill(null);
+  comentarios = new Array(10).fill("");
   timers = new Array(10).fill(0);
   intervalIds = new Array(10).fill(null);
   const list = document.getElementById("medicion-list");
@@ -763,12 +778,23 @@ function irAFormulario() { limpiarTimers(); showScreen("screen-form"); }
 function crearTarjeta(i) {
   const d = document.createElement("div");
   d.className = "med-card"; d.id = "mc-"+i;
-  d.innerHTML = `<div class="med-top"><span class="med-num">Medición ${i+1}</span><span class="med-badge" id="badge-${i}"></span></div>
+  d.innerHTML = `<div class="med-top">
+      <span class="med-num">Medición ${i+1}</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="med-badge" id="badge-${i}"></span>
+        <button class="btn-burbuja" id="btn-com-${i}" onclick="toggleComentario(${i})" title="Agregar comentario">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+        </button>
+      </div>
+    </div>
     <div class="med-time" id="time-${i}">00.0</div>
     <div class="med-btns">
       <button class="btn-iniciar" id="binit-${i}" onclick="iniciar(${i})"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Iniciar</button>
       <button class="btn-detener" id="bdet-${i}" onclick="detener(${i})" disabled><svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>Detener</button>
       <button class="btn-reset" onclick="resetear(${i})">↺</button>
+    </div>
+    <div class="comentario-row" id="com-row-${i}" style="display:none; margin-top:10px;">
+      <input type="text" class="comentario-input" id="com-input-${i}" placeholder="Comentario para M${i+1}..." oninput="comentarios[${i}]=this.value"/>
     </div>`;
   return d;
 }
@@ -812,6 +838,21 @@ function resetear(i) {
   actualizarResumen();
 }
 
+function toggleComentario(i) {
+  const row = document.getElementById("com-row-"+i);
+  const btn = document.getElementById("btn-com-"+i);
+  const visible = row.style.display !== "none";
+  row.style.display = visible ? "none" : "block";
+  if (visible) {
+    btn.classList.remove("activo");
+    comentarios[i] = "";
+    document.getElementById("com-input-"+i).value = "";
+  } else {
+    btn.classList.add("activo");
+    setTimeout(() => document.getElementById("com-input-"+i).focus(), 50);
+  }
+}
+
 function actualizarResumen() {
   const vals = medicionValues.filter(v => v !== null);
   if (!vals.length) {
@@ -850,12 +891,18 @@ function guardar() {
   const now = new Date();
   const fecha = now.toLocaleDateString("es-AR") + " " + now.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
 
+  // Construir string de comentarios: "M1: texto | M3: texto"
+  const comentariosStr = comentarios
+    .map((c, i) => c.trim() ? "M"+(i+1)+": "+c.trim() : "")
+    .filter(Boolean)
+    .join(" | ");
+
   const params = new URLSearchParams({
     action:"guardar", fecha, panel:currentPanel, puesto:currentPuesto, operador:currentOperador,
     m1:medicionValues[0]??"", m2:medicionValues[1]??"", m3:medicionValues[2]??"",
     m4:medicionValues[3]??"", m5:medicionValues[4]??"", m6:medicionValues[5]??"",
     m7:medicionValues[6]??"", m8:medicionValues[7]??"", m9:medicionValues[8]??"",
-    m10:medicionValues[9]??"", promedio:avg
+    m10:medicionValues[9]??"", promedio:avg, comentarios:comentariosStr
   });
 
   // fetch no-cors + timeout — funciona en todos los navegadores incluyendo Chrome mobile
@@ -887,6 +934,7 @@ function limpiarTimers() {
   intervalIds = new Array(10).fill(null);
   timers = new Array(10).fill(0);
   medicionValues = new Array(10).fill(null);
+  comentarios = new Array(10).fill("");
 }
 </script>
 </body>
